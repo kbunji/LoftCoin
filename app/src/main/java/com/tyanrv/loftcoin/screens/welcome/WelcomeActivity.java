@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.google.android.material.tabs.TabLayout;
 import com.tyanrv.loftcoin.App;
 import com.tyanrv.loftcoin.R;
 import com.tyanrv.loftcoin.data.prefs.Prefs;
@@ -34,6 +35,9 @@ public class WelcomeActivity extends AppCompatActivity {
     @BindView(R.id.start_btn)
     Button startBtn;
 
+    @BindView(R.id.tabs)
+    TabLayout tabs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +49,7 @@ public class WelcomeActivity extends AppCompatActivity {
         final Prefs prefs = ((App) getApplication()).getPrefs();
 
         pager.setAdapter(new WelcomePagerAdapter(getSupportFragmentManager()));
+        tabs.setupWithViewPager(pager, true);
         startBtn.setOnClickListener(v -> {
 
             prefs.setFirstLaunch(false);

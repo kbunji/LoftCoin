@@ -7,5 +7,4 @@
     <gradient
         android:startColor="@color/start_gradient_btn"
         android:endColor="@color/end_gradient_btn" />
-
 </shape>
