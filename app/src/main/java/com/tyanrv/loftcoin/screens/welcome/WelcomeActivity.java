@@ -22,6 +22,12 @@ public class WelcomeActivity extends AppCompatActivity {
         context.startActivity(starter);
     }
 
+    public static void startInNewTask(Context context) {
+        Intent starter = new Intent(context, WelcomeActivity.class);
+        context.startActivity(starter);
+    }
+
+
     @BindView(R.id.pager)
     ViewPager pager;
 
@@ -42,7 +48,7 @@ public class WelcomeActivity extends AppCompatActivity {
         startBtn.setOnClickListener(v -> {
 
             prefs.setFirstLaunch(false);
-            StartActivity.start(WelcomeActivity.this);
+            StartActivity.startInNewTask(WelcomeActivity.this);
         });
     }
 }
