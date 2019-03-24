@@ -25,6 +25,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public static void startInNewTask(Context context) {
         Intent starter = new Intent(context, WelcomeActivity.class);
+        starter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(starter);
     }
 
