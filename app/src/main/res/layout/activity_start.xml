@@ -29,7 +29,6 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/logo_inner_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28.8dp"
@@ -40,7 +39,6 @@
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/start_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"

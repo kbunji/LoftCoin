@@ -7,6 +7,8 @@ import com.tyanrv.loftcoin.data.api.ApiInitializer;
 import com.tyanrv.loftcoin.data.prefs.Prefs;
 import com.tyanrv.loftcoin.data.prefs.PrefsImpl;
 
+import timber.log.Timber;
+
 public class App extends Application {
 
     private Prefs prefs;
@@ -15,6 +17,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // logs only for debug
+        Timber.plant(new Timber.DebugTree());
 
         prefs = new PrefsImpl(this);
         api = new ApiInitializer().init();

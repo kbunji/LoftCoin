@@ -9,6 +9,7 @@ import com.tyanrv.loftcoin.App;
 import com.tyanrv.loftcoin.R;
 import com.tyanrv.loftcoin.data.api.Api;
 import com.tyanrv.loftcoin.data.prefs.Prefs;
+import com.tyanrv.loftcoin.screens.main.MainActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
@@ -46,11 +47,19 @@ public class StartActivity extends AppCompatActivity implements StartView {
         presenter = new StartPresenterImpl(prefs, api);
 
         presenter.attachView(this);
+
+        presenter.loadRates();
     }
 
     @Override
     protected void onDestroy() {
         presenter.detachView();
         super.onDestroy();
+    }
+
+
+    @Override
+    public void navigateToMainScreen() {
+        MainActivity.start(this);
     }
 }
