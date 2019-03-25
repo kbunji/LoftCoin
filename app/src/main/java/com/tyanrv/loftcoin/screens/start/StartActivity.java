@@ -1,8 +1,12 @@
 package com.tyanrv.loftcoin.screens.start;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.tyanrv.loftcoin.App;
@@ -13,6 +17,7 @@ import com.tyanrv.loftcoin.screens.main.MainActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class StartActivity extends AppCompatActivity implements StartView {
 
@@ -36,9 +41,16 @@ public class StartActivity extends AppCompatActivity implements StartView {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        startAnimations();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        ButterKnife.bind(this);
 
         Prefs prefs = ((App) getApplication()).getPrefs();
         Api api = (((App) getApplication()).getApi());
@@ -61,5 +73,24 @@ public class StartActivity extends AppCompatActivity implements StartView {
     @Override
     public void navigateToMainScreen() {
         MainActivity.start(this);
+    }
+
+    private void startAnimations() {
+
+        ObjectAnimator innerAnimator = ObjectAnimator.ofFloat(topCorner, "rotation", 0, 360);
+        innerAnimator.setDuration(30000);
+        innerAnimator.setRepeatMode(ValueAnimator.RESTART);
+        innerAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        innerAnimator.setInterpolator(new LinearInterpolator());
+
+        ObjectAnimator outerAnimator = ObjectAnimator.ofFloat(bottomCorner, "rotation", 0, -360);
+        outerAnimator.setDuration(60000);
+        outerAnimator.setRepeatMode(ValueAnimator.RESTART);
+        outerAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        outerAnimator.setInterpolator(new LinearInterpolator());
+
+        AnimatorSet set = new AnimatorSet();
+        set.play(innerAnimator).with(outerAnimator);
+        set.start();
     }
 }

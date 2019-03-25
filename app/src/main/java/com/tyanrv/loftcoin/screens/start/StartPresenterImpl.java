@@ -3,6 +3,7 @@ package com.tyanrv.loftcoin.screens.start;
 import com.tyanrv.loftcoin.data.api.Api;
 import com.tyanrv.loftcoin.data.api.model.RateResponse;
 import com.tyanrv.loftcoin.data.prefs.Prefs;
+import com.tyanrv.loftcoin.utils.Fiat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,10 @@ public class StartPresenterImpl implements StartPresenter {
 
     @Override
     public void loadRates() {
+
+        Fiat fiat = prefs.getFiatCurrency();
+
+        Timber.i("FIAT = %s", fiat);
 
         Call<RateResponse> call = api.rates(Api.CONVERT);
 
