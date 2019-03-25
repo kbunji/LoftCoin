@@ -3,12 +3,25 @@ package com.tyanrv.loftcoin.screens.start;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
+import com.tyanrv.loftcoin.App;
 import com.tyanrv.loftcoin.R;
+import com.tyanrv.loftcoin.data.api.Api;
+import com.tyanrv.loftcoin.data.prefs.Prefs;
 
 import androidx.appcompat.app.AppCompatActivity;
+import butterknife.BindView;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity implements StartView {
+
+    private StartPresenter presenter;
+
+    @BindView(R.id.start_top_corner)
+    ImageView topCorner;
+
+    @BindView(R.id.start_bottom_corner)
+    ImageView bottomCorner;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, StartActivity.class);
@@ -25,5 +38,19 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        Prefs prefs = ((App) getApplication()).getPrefs();
+        Api api = (((App) getApplication()).getApi());
+
+        // not good to use realization of Interface
+        presenter = new StartPresenterImpl(prefs, api);
+
+        presenter.attachView(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.detachView();
+        super.onDestroy();
     }
 }
