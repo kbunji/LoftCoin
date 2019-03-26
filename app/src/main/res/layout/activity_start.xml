@@ -7,10 +7,11 @@
     tools:context=".screens.start.StartActivity">
 
     <ImageView
+        android:id="@+id/start_top_corner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/start_top_corner"
-        android:translationX="-105dp"
+        android:translationX="-101dp"
         android:layout_marginTop="2.5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +29,6 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/logo_inner_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28.8dp"
@@ -39,7 +39,6 @@
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/start_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -53,6 +52,7 @@
         tools:text="LoftCoin" />
 
     <ImageView
+        android:id="@+id/start_bottom_corner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/start_bottom_corner"
