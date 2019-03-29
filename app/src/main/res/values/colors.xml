@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#191A29</color>
+    <color name="primary_dark">#101019</color>
     <color name="accent">#66688F</color>
 
     <color name="start_gradient_btn">#ff4465</color>
@@ -11,7 +12,14 @@
     <color name="start_gradient_inner_circle">#ff4465</color>
     <color name="end_gradient_inner_circle">#f6ca1d</color>
 
+    <color name="percent_change_up">#3DE77B</color>
+    <color name="percent_change_down">#FF4464</color>
+
+    <color name="rate_item_background_even">#212237</color>
+    <color name="rate_item_background_odd">@color/primary</color>
+
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#000000</color>
     <color name="white30">#4DFFFFFF</color>
 
 
