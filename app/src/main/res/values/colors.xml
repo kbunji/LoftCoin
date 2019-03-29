@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#191A29</color>
+    <color name="primary_dark">#101019</color>
     <color name="accent">#66688F</color>
 
     <color name="start_gradient_btn">#ff4465</color>
