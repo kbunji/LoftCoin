@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
@@ -48,6 +49,7 @@ public class RateFragment extends Fragment implements RateView {
     ViewGroup content;
 
     private RatePresenter presenter;
+    private RateAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class RateFragment extends Fragment implements RateView {
         Api api = (((App) application).getApi());
 
         presenter = new RatePresenterImpl(prefs, api);
+
+        adapter = new RateAdapter(prefs);
     }
 
     @Override
@@ -79,12 +83,11 @@ public class RateFragment extends Fragment implements RateView {
 
         toolbar.setTitle(R.string.rate_screen_title);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.onRefresh();
-            }
-        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+
+        refreshLayout.setOnRefreshListener(() -> presenter.onRefresh());
 
         presenter.attachView(this);
         presenter.getRate();
@@ -98,7 +101,7 @@ public class RateFragment extends Fragment implements RateView {
 
     @Override
     public void setCoins(List<Coin> coins) {
-
+        adapter.setItems(coins);
     }
 
     @Override
