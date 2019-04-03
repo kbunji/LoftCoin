@@ -1,8 +1,14 @@
 package com.tyanrv.loftcoin.screens.rate;
 
 import com.tyanrv.loftcoin.data.api.Api;
+import com.tyanrv.loftcoin.data.api.model.Coin;
 import com.tyanrv.loftcoin.data.api.model.RateResponse;
+import com.tyanrv.loftcoin.data.db.Database;
+import com.tyanrv.loftcoin.data.db.model.CoinEntity;
+import com.tyanrv.loftcoin.data.db.model.CoinEntityMapper;
 import com.tyanrv.loftcoin.data.prefs.Prefs;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,13 +21,17 @@ public class RatePresenterImpl implements RatePresenter {
 
     private Prefs prefs;
     private Api api;
+    private Database database;
+    private CoinEntityMapper coinEntityMapper;
 
     @Nullable
     private RateView view;
 
-    public RatePresenterImpl(Prefs prefs, Api api) {
+    public RatePresenterImpl(Prefs prefs, Api api, Database database, CoinEntityMapper coinEntityMapper) {
         this.prefs = prefs;
         this.api = api;
+        this.database = database;
+        this.coinEntityMapper = coinEntityMapper;
     }
 
     @Override
@@ -36,16 +46,32 @@ public class RatePresenterImpl implements RatePresenter {
 
     @Override
     public void getRate() {
+        List<CoinEntity> coinEntities = database.getCoins();
+
+        if (view != null) {
+            view.setCoins(coinEntities);
+        }
+    }
+
+    private void loadRate() {
         Call<RateResponse> call = api.rates(Api.CONVERT);
 
         call.enqueue(new Callback<RateResponse>() {
             @Override
             public void onResponse(@NonNull Call<RateResponse> call, @NonNull Response<RateResponse> response) {
 
-                RateResponse body = response.body();
+                if (response.body() != null) {
+                    List<Coin> coins = response.body().data;
+                    List<CoinEntity> coinEntities = coinEntityMapper.map(coins);
+                    database.saveCoins(coinEntities);
 
-                if (view != null && body != null) {
-                    view.setCoins(body.data);
+                    if (view != null) {
+                        view.setCoins(coinEntities);
+                        view.setRefreshing(false);
+                    }
+                }
+
+                if (view != null) {
                     view.setRefreshing(false);
                 }
             }
@@ -61,6 +87,7 @@ public class RatePresenterImpl implements RatePresenter {
 
     @Override
     public void onRefresh() {
-        getRate();
+//        getRate();
+        loadRate();
     }
 }
