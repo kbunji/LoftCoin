@@ -1,12 +1,12 @@
 package com.tyanrv.loftcoin.screens.rate;
 
-import com.tyanrv.loftcoin.data.api.model.Coin;
+import com.tyanrv.loftcoin.data.db.model.CoinEntity;
 
 import java.util.List;
 
 public interface RateView {
 
-    void setCoins(List<Coin> coins);
+    void setCoins(List<CoinEntity> coins);
 
     void setRefreshing(Boolean refreshing);
 
