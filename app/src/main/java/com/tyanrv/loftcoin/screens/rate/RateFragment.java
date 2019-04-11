@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +17,7 @@ import com.tyanrv.loftcoin.data.db.model.CoinEntity;
 import com.tyanrv.loftcoin.data.db.model.CoinEntityMapper;
 import com.tyanrv.loftcoin.data.db.model.CoinEntityMapperImpl;
 import com.tyanrv.loftcoin.data.prefs.Prefs;
+import com.tyanrv.loftcoin.utils.Fiat;
 
 import java.util.List;
 
@@ -33,7 +35,7 @@ import timber.log.Timber;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RateFragment extends Fragment implements RateView {
+public class RateFragment extends Fragment implements RateView, Toolbar.OnMenuItemClickListener, CurrencyDialog.CurrencyDialogListener {
 
 
     public RateFragment() {
@@ -88,6 +90,8 @@ public class RateFragment extends Fragment implements RateView {
         ButterKnife.bind(this, view);
 
         toolbar.setTitle(R.string.rate_screen_title);
+        toolbar.inflateMenu(R.menu.menu_rate);
+        toolbar.setOnMenuItemClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setHasFixedSize(true);
@@ -118,6 +122,30 @@ public class RateFragment extends Fragment implements RateView {
 
     @Override
     public void showCurrencyDialog() {
+        CurrencyDialog dialog = new CurrencyDialog();
+        assert getFragmentManager() != null;
+        dialog.show(getFragmentManager(), CurrencyDialog.TAG);
+        dialog.setListener(this);
+    }
 
+    @Override
+    public void invalidateRates() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_currency:
+                presenter.onMenuItemCurrencyClick();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onCurrencySelected(Fiat currency) {
+        presenter.onFiatCurrencySelected(currency);
     }
 }

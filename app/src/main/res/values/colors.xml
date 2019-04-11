@@ -21,6 +21,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="black">#000000</color>
     <color name="white30">#4DFFFFFF</color>
+    <color name="gray_50">#313249</color>
 
 
     <color name="bluey_grey">#9C9EB9</color>

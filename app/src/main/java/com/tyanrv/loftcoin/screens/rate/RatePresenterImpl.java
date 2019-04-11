@@ -5,6 +5,7 @@ import com.tyanrv.loftcoin.data.api.model.Coin;
 import com.tyanrv.loftcoin.data.db.Database;
 import com.tyanrv.loftcoin.data.db.model.CoinEntityMapper;
 import com.tyanrv.loftcoin.data.prefs.Prefs;
+import com.tyanrv.loftcoin.utils.Fiat;
 
 import java.util.List;
 
@@ -91,5 +92,21 @@ public class RatePresenterImpl implements RatePresenter {
     public void onRefresh() {
 //        getRate();
         loadRate();
+    }
+
+    @Override
+    public void onMenuItemCurrencyClick() {
+        if (view != null) {
+            view.showCurrencyDialog();
+        }
+    }
+
+    @Override
+    public void onFiatCurrencySelected(Fiat currency) {
+        prefs.setFiatCurrency(currency);
+
+        if (view != null) {
+            view.invalidateRates();
+        }
     }
 }
