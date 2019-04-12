@@ -4,6 +4,7 @@ package com.tyanrv.loftcoin.screens.rate;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.tyanrv.loftcoin.data.prefs.Prefs;
 import com.tyanrv.loftcoin.utils.Fiat;
 
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +39,11 @@ import timber.log.Timber;
  */
 public class RateFragment extends Fragment implements RateView, Toolbar.OnMenuItemClickListener, CurrencyDialog.CurrencyDialogListener {
 
+    private static final String LAYOUT_MANAGER_STATE = "layout_manager_state";
+
+    private Parcelable layoutManagerState;
+    private RatePresenter presenter;
+    private RateAdapter adapter;
 
     public RateFragment() {
         // Required empty public constructor
@@ -53,9 +60,6 @@ public class RateFragment extends Fragment implements RateView, Toolbar.OnMenuIt
 
     @BindView(R.id.rate_content)
     ViewGroup content;
-
-    private RatePresenter presenter;
-    private RateAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +103,10 @@ public class RateFragment extends Fragment implements RateView, Toolbar.OnMenuIt
 
         refreshLayout.setOnRefreshListener(() -> presenter.onRefresh());
 
+        if (savedInstanceState != null) {
+            layoutManagerState = savedInstanceState.getParcelable(LAYOUT_MANAGER_STATE);
+        }
+
         presenter.attachView(this);
         presenter.getRate();
     }
@@ -113,6 +121,21 @@ public class RateFragment extends Fragment implements RateView, Toolbar.OnMenuIt
     public void setCoins(List<CoinEntity> coins) {
         Timber.d("setCoins: ");
         adapter.setItems(coins);
+
+        if (layoutManagerState != null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(layoutManagerState);
+            layoutManagerState = null;
+        }
+    }
+
+    // сохранение состояния(для поворота экрана)
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(
+                LAYOUT_MANAGER_STATE,
+                Objects.requireNonNull(recyclerView.getLayoutManager()).onSaveInstanceState()
+        );
+        super.onSaveInstanceState(outState);
     }
 
     @Override
