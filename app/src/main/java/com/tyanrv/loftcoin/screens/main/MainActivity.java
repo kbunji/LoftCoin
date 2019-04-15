@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tyanrv.loftcoin.R;
+import com.tyanrv.loftcoin.screens.converter.ConverterFragment;
 import com.tyanrv.loftcoin.screens.rate.RateFragment;
 
 import androidx.annotation.NonNull;
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.menu_item_converter:
+                    showConverterFragment();
                     return true;
             }
             return false;
@@ -59,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void showRateFragment() {
         RateFragment fragment = new RateFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
+
+    private void showConverterFragment() {
+        ConverterFragment fragment = new ConverterFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);

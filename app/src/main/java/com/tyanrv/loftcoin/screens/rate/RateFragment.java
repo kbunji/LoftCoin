@@ -4,7 +4,9 @@ package com.tyanrv.loftcoin.screens.rate;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,8 +18,10 @@ import com.tyanrv.loftcoin.data.db.model.CoinEntity;
 import com.tyanrv.loftcoin.data.db.model.CoinEntityMapper;
 import com.tyanrv.loftcoin.data.db.model.CoinEntityMapperImpl;
 import com.tyanrv.loftcoin.data.prefs.Prefs;
+import com.tyanrv.loftcoin.utils.Fiat;
 
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,8 +37,13 @@ import timber.log.Timber;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RateFragment extends Fragment implements RateView {
+public class RateFragment extends Fragment implements RateView, Toolbar.OnMenuItemClickListener, CurrencyDialog.CurrencyDialogListener {
 
+    private static final String LAYOUT_MANAGER_STATE = "layout_manager_state";
+
+    private Parcelable layoutManagerState;
+    private RatePresenter presenter;
+    private RateAdapter adapter;
 
     public RateFragment() {
         // Required empty public constructor
@@ -51,9 +60,6 @@ public class RateFragment extends Fragment implements RateView {
 
     @BindView(R.id.rate_content)
     ViewGroup content;
-
-    private RatePresenter presenter;
-    private RateAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,12 +94,26 @@ public class RateFragment extends Fragment implements RateView {
         ButterKnife.bind(this, view);
 
         toolbar.setTitle(R.string.rate_screen_title);
+        toolbar.inflateMenu(R.menu.menu_rate);
+        toolbar.setOnMenuItemClickListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
         refreshLayout.setOnRefreshListener(() -> presenter.onRefresh());
+
+        if (savedInstanceState != null) {
+            layoutManagerState = savedInstanceState.getParcelable(LAYOUT_MANAGER_STATE);
+        }
+
+        assert getFragmentManager() != null;
+        Fragment fragmentDialog = getFragmentManager().findFragmentByTag(CurrencyDialog.TAG);
+
+        if (fragmentDialog != null) {
+            CurrencyDialog dialog = (CurrencyDialog) fragmentDialog;
+            dialog.setListener(this);
+        }
 
         presenter.attachView(this);
         presenter.getRate();
@@ -109,6 +129,21 @@ public class RateFragment extends Fragment implements RateView {
     public void setCoins(List<CoinEntity> coins) {
         Timber.d("setCoins: ");
         adapter.setItems(coins);
+
+        if (layoutManagerState != null) {
+            Objects.requireNonNull(recyclerView.getLayoutManager()).onRestoreInstanceState(layoutManagerState);
+            layoutManagerState = null;
+        }
+    }
+
+    // сохранение состояния(для поворота экрана)
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable(
+                LAYOUT_MANAGER_STATE,
+                Objects.requireNonNull(recyclerView.getLayoutManager()).onSaveInstanceState()
+        );
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -118,6 +153,30 @@ public class RateFragment extends Fragment implements RateView {
 
     @Override
     public void showCurrencyDialog() {
+        CurrencyDialog dialog = new CurrencyDialog();
+        assert getFragmentManager() != null;
+        dialog.show(getFragmentManager(), CurrencyDialog.TAG);
+        dialog.setListener(this);
+    }
 
+    @Override
+    public void invalidateRates() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_currency:
+                presenter.onMenuItemCurrencyClick();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onCurrencySelected(Fiat currency) {
+        presenter.onFiatCurrencySelected(currency);
     }
 }
