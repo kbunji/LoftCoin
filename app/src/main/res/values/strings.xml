@@ -27,4 +27,7 @@
     <string name="usd" translatable="false">$</string>
     <string name="eur" translatable="false">€</string>
     <string name="rub" translatable="false">₽</string>
+
+    <string name="converter_screen_title">Конвертер</string>
+
 </resources>
