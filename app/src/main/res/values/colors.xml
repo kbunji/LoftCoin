@@ -4,6 +4,8 @@
     <color name="primary_dark">#101019</color>
     <color name="accent">#66688F</color>
 
+    <color name="secondary_text_color_dark">#66688F</color>
+
     <color name="start_gradient_btn">#ff4465</color>
     <color name="end_gradient_btn">#f6ca1d</color>
 
@@ -17,6 +19,8 @@
 
     <color name="rate_item_background_even">#212237</color>
     <color name="rate_item_background_odd">@color/primary</color>
+
+    <color name="wallet_card_background">#2E2F47</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="black">#000000</color>

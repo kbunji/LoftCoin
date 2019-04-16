@@ -32,7 +32,8 @@ ext {
     retrofit_ver = '2.5.0'
     okhttp_ver = '3.14.0'
     room_version = "2.1.0-alpha04"
-    rxbinding_ver= "3.0.0-alpha2"
+    rxbinding_ver = "3.0.0-alpha2"
+    lifecycle_version = "2.0.0"
 }
 
 dependencies {
@@ -72,6 +73,9 @@ dependencies {
     //RxBinding
     implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxbinding_ver"
     implementation "com.jakewharton.rxbinding3:rxbinding-material:$rxbinding_ver"
+
+    // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0-alpha03'
