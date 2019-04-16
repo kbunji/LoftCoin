@@ -27,7 +27,6 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -122,7 +121,7 @@ public class ConverterFragment extends Fragment {
 
         Disposable disposable = RxTextView.afterTextChangeEvents(sourceAmount)
 //                .debounce(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+//                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event ->
                         viewModel.onSourceAmountChange(Objects.requireNonNull(event.getEditable()).toString())
                 );
