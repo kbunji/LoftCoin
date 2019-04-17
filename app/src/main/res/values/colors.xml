@@ -24,9 +24,13 @@
 
     <color name="white">#FFFFFFFF</color>
     <color name="black">#000000</color>
+    <color name="green">#3DE77B</color>
+    <color name="red">#FF4464</color>
     <color name="white30">#4DFFFFFF</color>
     <color name="gray_50">#313249</color>
 
 
     <color name="bluey_grey">#9C9EB9</color>
+    <color name="transaction_income">@color/green</color>
+    <color name="transaction_expense">@color/red</color>
 </resources>

@@ -3,6 +3,7 @@ package com.tyanrv.loftcoin.screens.wallets;
 import android.app.Application;
 
 import com.tyanrv.loftcoin.data.db.model.CoinEntity;
+import com.tyanrv.loftcoin.data.db.model.TransactionModel;
 import com.tyanrv.loftcoin.data.db.model.WalletModel;
 
 import java.util.List;
@@ -25,10 +26,14 @@ abstract class WalletsViewModel extends AndroidViewModel {
 
     abstract LiveData<List<WalletModel>> wallets();
 
+    abstract LiveData<List<TransactionModel>> transactions();
+
     abstract void getWallets();
 
     abstract void onNewWalletClick();
 
     abstract void onCurrencySelected(CoinEntity coinEntity);
+
+    abstract void onWalletChanged(int position);
 
 }
