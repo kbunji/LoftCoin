@@ -2,6 +2,8 @@ package com.tyanrv.loftcoin.data.db.room;
 
 import com.tyanrv.loftcoin.data.db.Database;
 import com.tyanrv.loftcoin.data.db.model.CoinEntity;
+import com.tyanrv.loftcoin.data.db.model.Transaction;
+import com.tyanrv.loftcoin.data.db.model.TransactionModel;
 import com.tyanrv.loftcoin.data.db.model.Wallet;
 import com.tyanrv.loftcoin.data.db.model.WalletModel;
 
@@ -40,6 +42,16 @@ public class DatabaseImplRoom implements Database {
     @Override
     public Flowable<List<WalletModel>> getWallets() {
         return appDatabase.walletDao().getWallets();
+    }
+
+    @Override
+    public void saveTransaction(List<Transaction> transactions) {
+        appDatabase.walletDao().saveTransactions(transactions);
+    }
+
+    @Override
+    public Flowable<List<TransactionModel>> getTransactions(String walletId) {
+        return appDatabase.walletDao().getTransactions(walletId);
     }
 
 

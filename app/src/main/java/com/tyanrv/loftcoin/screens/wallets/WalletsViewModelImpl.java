@@ -5,10 +5,12 @@ import android.app.Application;
 import com.tyanrv.loftcoin.App;
 import com.tyanrv.loftcoin.data.db.Database;
 import com.tyanrv.loftcoin.data.db.model.CoinEntity;
+import com.tyanrv.loftcoin.data.db.model.Transaction;
 import com.tyanrv.loftcoin.data.db.model.Wallet;
 import com.tyanrv.loftcoin.data.db.model.WalletModel;
 import com.tyanrv.loftcoin.utils.SingleLiveData;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -73,6 +75,7 @@ public class WalletsViewModelImpl extends WalletsViewModel {
                                 newWalletVisible.setValue(false);
                                 walletsVisible.setValue(true);
 
+
                                 wallets.setValue(walletModels);
                             }
                         },
@@ -89,9 +92,11 @@ public class WalletsViewModelImpl extends WalletsViewModel {
     @Override
     void onCurrencySelected(CoinEntity coinEntity) {
         Wallet wallet = randomWallet(coinEntity);
+        List<Transaction> transactions = randomTransactions(wallet);
 
         Disposable disposable = Observable.fromCallable(() -> {
                     database.saveWallet(wallet);
+            database.saveTransaction(transactions);
                     return new Object();
                 }
         ).subscribeOn(Schedulers.io())
@@ -100,6 +105,32 @@ public class WalletsViewModelImpl extends WalletsViewModel {
                 }, Timber::e);
 
         disposables.add(disposable);
+    }
+
+    private List<Transaction> randomTransactions(Wallet wallet) {
+        Random random = new Random();
+        int max = random.nextInt(20);
+
+        List<Transaction> transactions = new ArrayList<>();
+
+        for (int i = 0; i < max; i++) {
+            transactions.add(randomTransaction(wallet));
+        }
+
+        return transactions;
+    }
+
+    private Transaction randomTransaction(Wallet wallet) {
+        Random random = new Random();
+
+        long startDate = 1483228800000L;
+        long nowDate = System.currentTimeMillis();
+        long date = startDate + (long) (random.nextDouble() * (nowDate - startDate));
+
+        double amount = 4 * random.nextDouble();
+        boolean amountSign = random.nextBoolean();
+
+        return new Transaction(wallet.walletId, wallet.currencyId, amountSign ? amount : -amount, date);
     }
 
     @Override
