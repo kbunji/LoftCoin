@@ -137,6 +137,5 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             Date date = new Date(model.transaction.date);
             this.date.setText(dateFormatter.format(date));
         }
-
     }
 }

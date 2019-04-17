@@ -33,6 +33,8 @@ import butterknife.ButterKnife;
 public class WalletsFragment extends Fragment implements CurrenciesBottomSheetListener {
 
 
+    private static final String WALLET_POSITION = "wallet_position";
+
     public WalletsFragment() {
         // Required empty public constructor
     }
@@ -53,6 +55,8 @@ public class WalletsFragment extends Fragment implements CurrenciesBottomSheetLi
 
     private WalletsPagerAdapter walletsPagerAdapter;
     private TransactionsAdapter transactionsAdapter;
+
+    private int walletPosition = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,10 +104,20 @@ public class WalletsFragment extends Fragment implements CurrenciesBottomSheetLi
             ((CurrenciesBottomSheet) bottomSheet).setListener(this);
         }
 
+        if (savedInstanceState != null) {
+            walletPosition = savedInstanceState.getInt(WALLET_POSITION, 0);
+        }
+
         viewModel.getWallets();
 
         initOutputs();
         initInputs();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(WALLET_POSITION, walletsPager.getCurrentItem());
+        super.onSaveInstanceState(outState);
     }
 
     private void initOutputs() {
@@ -134,7 +148,13 @@ public class WalletsFragment extends Fragment implements CurrenciesBottomSheetLi
         viewModel.walletsVisible().observe(this, visible ->
                 walletsPager.setVisibility(visible ? View.VISIBLE : View.GONE));
 
-        viewModel.wallets().observe(this, wallets -> walletsPagerAdapter.setWallets(wallets));
+        viewModel.wallets().observe(this, wallets -> {
+            walletsPagerAdapter.setWallets(wallets);
+            if (walletPosition != 0) {
+                walletsPager.setCurrentItem(walletPosition);
+                walletPosition = 0;
+            }
+        });
 
         viewModel.transactions().observe(this, transactionModels -> transactionsAdapter.setTransactions(transactionModels));
     }
